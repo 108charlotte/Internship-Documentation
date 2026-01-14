@@ -34,8 +34,8 @@ const sidebars = {
           label: 'Authentication',
           items: [
             'full-stack-w-docker/authentication/authentication',
-            'full-stack-w-docker/authentication/backend',
-            'full-stack-w-docker/authentication/frontend'
+            'full-stack-w-docker/authentication/frontend',
+            'full-stack-w-docker/authentication/backend'
           ],
         },
         {
@@ -43,8 +43,8 @@ const sidebars = {
           label: 'Tasks',
           items: [
             'full-stack-w-docker/tasks/tasks',
-            'full-stack-w-docker/tasks/backend',
-            'full-stack-w-docker/tasks/frontend'
+            'full-stack-w-docker/tasks/frontend',
+            'full-stack-w-docker/tasks/backend'
           ],
         },
         {
@@ -52,8 +52,8 @@ const sidebars = {
           label: 'Permissions',
           items: [
             'full-stack-w-docker/permissions/permissions',
-            'full-stack-w-docker/permissions/backend',
-            'full-stack-w-docker/permissions/frontend'
+            'full-stack-w-docker/permissions/frontend',
+            'full-stack-w-docker/permissions/backend'
           ],
         },
       ],
