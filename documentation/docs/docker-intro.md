@@ -8,7 +8,7 @@ A **kernel** is the part of the operating system which delegates resources and m
 To understand this, let's first look at how virtual machines operate on a computer. 
 
 <figure>
-![Virtual machines running without Docker](./img/virtual-machines-docker.avif)
+![Virtual machines running without Docker](./full-stack-w-docker/authentication/img/virtual-machines-docker.avif)
 <figcaption>Each application runs in a virtual machine which has its own "Guest Operating System," which is **computationally expensive** (image from [this Docker tutorial](https://www.docker.com/resources/what-container/) on containers and VMs)</figcaption>
 </figure>
 

@@ -35,7 +35,8 @@ const sidebars = {
           items: [
             'full-stack-w-docker/authentication/authentication',
             'full-stack-w-docker/authentication/frontend',
-            'full-stack-w-docker/authentication/backend'
+            'full-stack-w-docker/authentication/backend', 
+            'full-stack-w-docker/authentication/docker-compose'
           ],
         },
         {
