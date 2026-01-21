@@ -150,7 +150,6 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     env_file:
       - .env
     depends_on: 

@@ -38,11 +38,11 @@ RUN pip install -r requirements.txt
 # copies everything else in "backend" to the working directory
 COPY . .
 
-# runs a command to migrate models to the SQL database and start the Django app on port 8000
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+# runs a command to create and migrate models to the SQL database and start the Django app on port 8000
+CMD ["sh", "-c", "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
 ```
 
-Notice how we didn't run `makemigrations` - this is more of a Django detail, but if you're wondering its because we didn't have any custom models to migrate. 
+Although we ran `makemigrations`, since we are using the built-in user model this isn't actually necessary for authentication, but will be important later for the custom tasks model. 
 
 Your entire Dockerfile should look like this: 
 ```dockerfile

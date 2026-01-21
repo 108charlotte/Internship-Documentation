@@ -1,22 +1,15 @@
 # Installing Docker and Docker Compose
-Your EC2 instance is now ready for your Docker application, but it doesn't have Docker or Docker compose installed yet or the images necessary to run it. After you launch your EC2 instance you'll see a gallery of options, but click on the one that looks like the below: 
+Your EC2 instance is now ready for your Docker application, but it doesn't have Docker or Docker Compose installed yet or the images necessary to run it. After you launch your EC2 instance you'll see a gallery of options, but click on the one that looks like the below: 
 
 ![Connect to your instance](./img/connect_to_your_instance.png)
 
-It will automatically select "Connect using a public IP", so you can copy the "Public IPv4 address". Now, you'll ssh into your EC2 instance using the following commands, but first copy the path of your key pair certificate on your computer to your clipboard! For the second line, you will need the EC2 instance's public ip address, which you just copied. 
+It will automatically select "Connect using a public IP", and you should see an orange "Connect" button at the bottom right corner of your window. Click connect, and you will be connected to your instance! 
 
 :::tip
 If you want to learn about what SSH is, check out [this video](https://www.youtube.com/watch?v=ORcvSkgdA58)! 
 :::
 
-```bash
-chmod 400 /REPLACE/WITH/PATH/TO/YOUR/KEY/PAIR.pem # ensures key isn't publicly accessible or editable, replace with actual path
-ssh -i /REPLACE/WITH/PATH/TO/YOUR/KEY/PAIR.pem ec2-user@YOUR_PUBLIC_IP # sshs into ec2 instance, replace with actual path and actual IP address
-```
-
-The second command will require a confirmation for whether or not you want to continue connecting, say "yes" to continue. 
-
-Now, you need to install Docker and Docker compose. Install Docker with this command: 
+Now, you need to install Docker and Docker Compose. Install Docker with this command: 
 
 ```bash
 sudo yum update -y # update yum before installing docker! 
@@ -35,22 +28,25 @@ sudo usermod -a -G docker ec2-user
 exit # allows you to log back in for permission changes to take effect
 ```
 
-Now, ssh back in the same way as before: 
-```bash
-ssh -i /REPLACE/WITH/PATH/TO/YOUR/KEY/PAIR.pem ec2-user@YOUR_PUBLIC_IP
-```
+You end by exiting since permission changes require a new session to take effect. You'll know it's done running when you see "logout" printed, which confirms that your exit command ran. Now, you'll need to re-connect to your instance the same way you connected to it initially - go back to your EC2 instance in the AWS console, select "Connect" to pull up the "EC2 Instance Connect" section, and click the orange "Connect" button. 
 
-Since our EC2 instance is on an Amazon Linux, use the following command to install the `docker-compose-plugin` package: 
+Since our EC2 instance is on Amazon Linux 2023, you'll need to install the binary for `docker-compose`:
 
 ```bash
-sudo yum install -y docker-compose-plugin
+# downloads Docker Compose binary
+sudo curl -L "https://github.com/docker/compose/releases/download/v2.24.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# makes docker compose binary executable so we can use docker-compose commands
+sudo chmod +x /usr/local/bin/docker-compose
 ```
+
+You may have noticed that, rather than using the latest version of Docker compose, we are using a fixed version to avoid compatibility errors which may arise with future versions. 
 
 Then, verify both installations using: 
 
 ```bash
 docker version
-docker compose version
+docker-compose version
 ```
 
-Once you're done, click next to learn how to add your GitHub repo files to the instance. 
+Both should run without errors (and output version numbers), indicating the installations were successful. Now, click next to learn how to add your GitHub repo files to the instance. 

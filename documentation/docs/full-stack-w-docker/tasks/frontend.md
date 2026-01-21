@@ -1,5 +1,5 @@
 # Frontend
-Go into the "frontend" folder, then into "src" and find `App.jsx`. It will have some placeholder content, including a vite logo and React logo. Delete this content to create a base to work from, including the imports we will be using:  
+Go into the `frontend` folder, then into `src` and find `App.jsx`. It will have some placeholder content, including a vite logo and React logo. Delete this content and replace it with the below code, which creates a base to work from, including the imports we will be using:  
 
 ```jsx
 import { useState, useEffect } from 'react'; 
@@ -29,9 +29,9 @@ There is also some task-addition specific data to store: the name (`namefortask`
 
 For deleting tasks when a task is clicked, we need a `clickedTaskName` and a variable to store if a request to delete a certain task should be sent to the backend (`sendDeleteRequest`). 
 
-For displaying user error messages, we need `errorForUser`, for retrieving the username of the currently active user sent from logging in/registering we will need to set a "location" variable using `useLocation()`, and in order to redirect to other pages we will need to define a "navigate" variable with `useNavigate()`
+For displaying user error messages, we need `errorForUser`, for retrieving the username of the currently active user sent from logging in/registering we will need to set a `location` variable using `useLocation()`, and in order to redirect to other pages we will need to define a `navigate` variable with `useNavigate()`
 
-Now, define all of these at the top of the `App()` function with useState and their defaults, along with "location" and "navigate": 
+Now, define all of these at the top of the `App()` function with `useState` and their defaults, along with `location` and `navigate`: 
 ```jsx
 const location = useLocation();
 
@@ -81,9 +81,9 @@ export default App;
 ```
 
 ## Not Signed In Screen
-When no user is logged in, the "/" path will currently display this page, but we want to force users to authenticate before they can see their or others tasks. When a user is authenticated, two values are passed through the location state: an initial value for the `username` (what is displayed in the search bar when looking for a user's tasks) and an `activeUserUsername` (which represents the username of the active user). The difference between these two variables is that `username` will change every time the user searches for another user's tasks, while `activeUserUsername` only changes when a new user is authenticated. 
+When no user is logged in, the `/` path will currently display this page, but we want to force users to authenticate before they can see their or others tasks. When a user is authenticated, two values are passed through the location state: an initial value for the `username` (what is displayed in the search bar when looking for a user's tasks) and an `activeUserUsername` (which represents the username of the active user). The difference between these two variables is that `username` will change every time the user searches for another user's tasks, while `activeUserUsername` only changes when a new user is authenticated. 
 
-So, to verify that a user is currently logged in, we can use `activeUserUsername` from `location.state`. Let's set up a conditional in jsx beneath the "Tasks Manager" heading to render different pages depending on whether or not there is an authenticates user: 
+So, to verify that a user is currently logged in, we can use `activeUserUsername` from `location.state`. Let's set up a conditional in jsx beneath `<h1>Tasks Manager</h1>` to render different pages depending on whether or not there is an authenticated user: 
 
 ```jsx
 {/* checks if there is an active username from the location state */}
@@ -139,7 +139,7 @@ export default App;
 
 
 ## Retrieving Tasks
-First, the application should allow users to display the tasks of any other user with an account by searching their username. When a user is first logged in, their name should be auto-populated in the search bar so they can see their own tasks. The HTML form to do this can be found below. This should be added beneath the "welcome" p tag.  
+First, the application should allow users to display the tasks of any other user with an account by searching their username. When a user is first logged in, their name should be auto-populated in the search bar so they can see their own tasks. The HTML form to do this can be found below. This should be added beneath `<p>Welcome {location.state?.activeUserUsername}!</p>`. 
 
 ```jsx
 <div className="username-form">
@@ -606,7 +606,7 @@ function App() {
 export default App; 
 ```
 
-When you run `docker compose up --build` you should see a form for submitting new tasks when you first authenticate. If not, make sure the username entered into the search bar is your own! However, if you enter task names and descriptions, they will not yet be added because the [backend](./backend.md) has not been configured to respond to these requests. Now, let's allow users to delete their own tasks also by clicking on them. 
+When you run `docker compose up --build` you won't yet be able to see the form for submitting new tasks or the list of tasks we just added since both rely on a successful response being returned from the backend when retrieving a user's tasks. If not, make sure the username entered into the search bar is your own! However, if you enter task names and descriptions, they will not yet be added because the [backend](./backend.md) has not been configured to respond to these requests. Now, let's allow users to delete their own tasks also by clicking on them. 
 
 
 ## Deleting Tasks
@@ -629,11 +629,11 @@ const deleteTask = (event) => {
 
 You may be wondering why this function isn't making the `fetch` request directly. The reason is that, since `clickedTaskName` is defined by `useState`, in order to make sure that the value is updated in `clickedTaskName` before the `fetch` request is sent. It will also set the error for the user back to an empty string, so that the user doesn't see any ghost errors from past requests. Finally, it updates the `sendDeleteRequest` variable to true. When this variable is updated, we know that `clickedTaskName` has also been updated since both use `useState`. 
 
-Now, let's define a `useEffect` block which checks if `sendDeleteRequest` is true. We'll configure this block to run whenever `sendStatusUpdateRequest` updates, and it will send a fetch request to the `/deletetask` endpoint, then follow a similar logic flow to adding a task to either set an error for the user or get the tasks for a user if the operation was successful. Here's the code for the `useEffect` block: 
+Now, let's define a `useEffect` block which checks if `sendDeleteRequest` is true. We'll configure this block to run whenever `sendDeleteRequest` updates, and it will send a fetch request to the `/deletetask` endpoint, then follow a similar logic flow to adding a task to either set an error for the user or get the tasks for a user if the operation was successful. Here's the code for the `useEffect` block: 
 
 ```jsx
 useEffect(() => {
-    if (sendStatusUpdateRequest) {
+    if (sendDeleteRequest) {
         fetch("http://localhost:8000/deletetask", {
             method: "POST", 
             headers: {
@@ -655,9 +655,9 @@ useEffect(() => {
             console.log("Error:", error);
             setErrorForUser("Error deleting task");
         });  
-        setSendStatusUpdateRequest(false); 
+        setSendDeleteRequest(false); 
     }
-}, [sendStatusUpdateRequest])
+}, [sendDeleteRequest])
 ```
 
 
@@ -727,6 +727,40 @@ function App() {
             credentials: "include",
         }).catch((error) => console.error("CSRF token retrieval error:", error));
     }, []);
+
+    useEffect(() => {
+      if (sendDeleteRequest) {
+          fetch("http://localhost:8000/deletetask", {
+              method: "POST", 
+              headers: {
+                  "Content-Type": "application/json", 
+                  "X-CSRFToken": getCookie('csrftoken'),
+              }, 
+              credentials: "include", 
+              body: JSON.stringify({"clickedtaskname": clickedTaskName, "usernamefortask": username})
+          })
+          .then(response => response.json())
+          .then((error) => {
+              if (error.error == "None, successfully deleted task") {
+                  getTasksForUsername();
+              } else {
+                  setErrorForUser(error.error);  
+              }
+          })
+          .catch((error) => {
+              console.log("Error:", error);
+              setErrorForUser("Error deleting task");
+          });  
+          setSendDeleteRequest(false); 
+      }
+    }, [sendDeleteRequest])
+
+    const deleteTask = (event) => {
+        event.preventDefault(); 
+        setClickedTaskName(event.currentTarget.id); 
+        setErrorForUser("");
+        setSendDeleteRequest(true);
+    }
 
     const logout = (event) => {
         event.preventDefault(); 

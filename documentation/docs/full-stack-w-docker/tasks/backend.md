@@ -5,12 +5,13 @@ Let's start by creating a new Django project for task management. This can be ac
 docker compose run --rm backend sh -c "python manage.py startapp tasks"
 ```
 
-Now that we have docker compose up, its much easier to use Django commands through the backend container. Go to the main `urls.py` file in the `djangobackend` folder (this is the folder for the main app) - you will know you are in the right folder if you see `settings.py`! Now, add a new path for the tasks app. `urlpatterns` should now look like this: 
+Now that we have docker compose up, we can use Django commands through the backend container. Go to the main `urls.py` file in the `djangobackend` folder (this is the folder for the main app) - you will know you are in the right folder if you see `settings.py`! Now, add a new path for the tasks app. `urlpatterns` should now look like this: 
 
 ```python
 urlpatterns = [
     path('', include('core.urls')),
-    path('authentication/', include('authentication.urls'))
+    path('authentication/', include('authentication.urls')),
+    path('', include('tasks.urls'))
 ]
 ```
 
@@ -24,6 +25,20 @@ urlpatterns = [
     path('tasks', getUserTasks, name='tasks'),
     path('addtask', addTaskForUser, name='addtask'), 
     path('deletetask', deleteTask, name='deletetask')
+]
+```
+
+Make sure to include the new tasks app in `settings.py`: 
+
+```python
+INSTALLED_APPS = [
+    # from past sections
+    'authentication', 
+    'corsheaders', 
+    
+    'tasks', # add this! 
+
+    # ...other installed apps...
 ]
 ```
 
@@ -209,4 +224,9 @@ def deleteTask(request):
 
 Now, run `docker compose up --build`! The application is now fully configured on Docker, so you can add, delete, and search tasks, create different accounts, log in, log out, and experiment! Also, feel free to change the page styling to better suit your tastes :)
 
-Next, we will deploy this containerized application on AWS! Click next to learn about what AWS is, and why you should learn how to use it. 
+To test all of the functionality, I would recommend doing the following: 
+1. creating two accounts, testing login/logout functionality
+2. adding tasks to both accounts
+3. deleting tasks from your own account and trying to delete tasks from the account you aren't logged into
+
+Next, we will deploy this containerized application on AWS! Click [next](../../deploying-on-aws/section-overview.md) to learn about what AWS is, and why you should learn how to use it. 
