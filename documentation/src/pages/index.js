@@ -32,8 +32,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={`Full-Stack with Docker and AWS Tutorial Website`}
+      description="A website built with Docusaurus to learn Docker containerization and AWS hosting">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

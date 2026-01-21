@@ -5,41 +5,38 @@ import styles from './styles.module.css';
 const FeatureList = [
   {
     title: 'Containerization with Docker',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    img: require('@site/static/img/docker-logo.png').default,
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        This tutorial explains Docker and guides you through creating a multi-container full-stack application configured with Docker Compose. 
       </>
     ),
   },
   {
     title: 'Full-Stack Applications',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    img: require('@site/static/img/full-stack-developer.png').default,
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        Learn how to create a frontend with React, backend with Django, and database with PostgreSQL, and set up communication between them. (image credit: <a href="https://www.flaticon.com/free-icons/development" title="development icons">Development icons created by Talha Dogar - Flaticon</a>)
       </>
     ),
   },
   {
     title: 'Hosting on AWS',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    img: require('@site/static/img/aws.png').default,
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        Learn how to use the AWS console by deploy a multi-container application on an AWS EC2 instance. 
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({img, title, description}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <img src={img} className={styles.featureSvg} alt={title} style={{objectFit: 'contain'}} />
       </div>
       <div className="text--center padding-horiz--md">
         <Heading as="h3">{title}</Heading>
