@@ -23,14 +23,14 @@ const config = {
   url: 'https://108charlotte.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/Internship-Documentation/',
+  baseUrl: '/Full-Stack-with-Docker-and-AWS-Tutorial/',
 
   trailingSlash: false, 
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: '108charlotte', // Usually your GitHub org/user name.
-  projectName: 'Internship-Documentation', // Usually your repo name.
+  projectName: 'Full-Stack-with-Docker-and-AWS-Tutorial', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
