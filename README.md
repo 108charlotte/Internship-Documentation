@@ -10,9 +10,13 @@ This tutorial was created as a final project for my two-week internship for the 
 The tutorial starts with an overview, then discusses Docker and Docker desktop installation. There are two main sections of the tutorial, both of which include a section overview: "Full Stack with Docker" and "Deploying on AWS". 
 
 ### Full Stack with Docker
-"Full Stack with Docker" has two sections within it, both of which have their own overviews: "Authentication" and "Tasks". The "Authentication" section focuses on setting up a login and signup flow for a user, along with creating a Docker Compose file and PostgreSQL database. The "Tasks" section is for the dashboard once a user is authenticated, where they can search for any user's tasks but can only add and remove tasks which are assigned to them. Both the "Authentication" and "Tasks" sections start with a section overview (named "Authentication" and "Tasks" respectively), then describe the frontend setup and then the backend setup (after this, "Authentication" goes further into other categories, but these two are shared by both). The frontend tutorial is included before the backend tutorial so that issues with running Docker containers can be troubleshooted visually as early on as possible. 
+"Full Stack with Docker" has two sections within it, both of which have their own overviews: "Authentication" and "Tasks". 
+- Authentication: Focuses on setting up a login and signup flow for a user, along with creating a Docker Compose file and PostgreSQL database
+- Tasks: Create the dashboard once a user is authenticated, where they can search for any user's tasks but can only add and remove tasks which are assigned to them.
+
+Both the "Authentication" and "Tasks" sections start with a section overview (named "Authentication" and "Tasks" respectively), then describe the frontend setup and then the backend setup (after this, "Authentication" goes further into other categories, but these two are shared by both). The frontend tutorial is included before the backend tutorial so that issues with running Docker containers can be troubleshooted visually as early on as possible. 
 
 ### Deploying on AWS
 "Deploying on AWS" includes a section overview, then a considerations page discussing the limitations of a free AWS account and the tutorial's choice to deploy on an Amazon EC2 instance, then a section on EC2 setup in the AWS developer console which ends with successfully deploying the full-stack containerized application from the last section on AWS. 
 
-The tutorial ends with a review and congrats, where users can provide feedback for course improvement through [this form](https://docs.google.com/forms/d/e/1FAIpQLScqApoTfJlzjlRdm3h1OhkbRPy4CSp657Oe0xI5fljNYGRljw/viewform). 
+The tutorial ends with a review and congrats, where users can provide feedback for course improvement through [this form](https://docs.google.com/forms/d/e/1FAIpQLScqApoTfJlzjlRdm3h1OhkbRPy4CSp657Oe0xI5fljNYGRljw/viewform)! 
