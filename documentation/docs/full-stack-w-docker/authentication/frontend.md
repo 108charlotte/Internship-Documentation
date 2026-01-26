@@ -173,7 +173,7 @@ Now, let's make it so that whenever these inputs are changed, the username and p
 </div>
 ```
 
-Now we need to define the URL to make requests to which will pull from environmental variables. Later, we'll configure this in the [database]("./database.md) section, but for now we'll include a fallback for local development. This will be important when the application is deployed on an EC2 instance! 
+Now we need to define the URL to make requests to which will pull from environmental variables. Later, we'll configure this in the [database](./database.md) section, but for now we'll include a fallback for local development. This will be important when the application is deployed on an EC2 instance! 
 
 ```jsx
 const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
