@@ -9,7 +9,6 @@ Now that we have docker compose up, we can use Django commands through the backe
 
 ```python
 urlpatterns = [
-    path('', include('core.urls')),
     path('authentication/', include('authentication.urls')),
     path('', include('tasks.urls'))
 ]

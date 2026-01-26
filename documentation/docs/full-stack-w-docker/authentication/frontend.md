@@ -173,14 +173,20 @@ Now, let's make it so that whenever these inputs are changed, the username and p
 </div>
 ```
 
-Now we have a form which is storing the user's credentials! But how can this application verify if these credentials are correct? And what is the "login" function called when the form is submitted? First, the login function needs to prevent the default form submission behavior (reloading the page) because that isn't necessary here. Then, it will make a request to the backend which includes the entered credentials. From there, it will retrieve the response, update the error message if necessary, and if the login was a success, redirect to the main dashboard at "/". The below code to do that should be added beneath the `onState` variable declarations but above the `return` statement: 
+Now we need to define the URL to make requests to which will pull from environmental variables. Later, we'll configure this in the [database]("./database.md) section, but for now we'll include a fallback for local development. This will be important when the application is deployed on an EC2 instance! 
+
+```jsx
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+```
+
+Now we have a form which is storing the user's credentials! But how can this application verify if these credentials are correct? And what is the "login" function that's called when the form is submitted? First, the login function needs to prevent the default form submission behavior (reloading the page) because that isn't necessary here. Then, it will make a request to the backend which includes the entered credentials. Instead of using a static URL, it will use a URL from an environmental variable (see above). From there, it will retrieve the response, update the error message if necessary, and if the login was a success, redirect to the main dashboard at "/". The below code to do that should be added beneath the `onState` variable declarations but above the `return` statement: 
 
 ```javascript
 const navigate = useNavigate(); {/* this will allow us to redirect to a new URL for successful login attempts */}
 
 const login = (event) => {
         event.preventDefault(); 
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -206,6 +212,8 @@ import { useState, useEffect } from 'react';
 import './AuthLayout.css'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function Login() {
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState(""); 
@@ -215,7 +223,7 @@ function Login() {
 
     const login = (event) => {
         event.preventDefault(); 
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -264,6 +272,8 @@ import { useState, useEffect } from 'react';
 import './AuthLayout.css'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function Register() {
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState(""); 
@@ -274,7 +284,7 @@ function Register() {
 
     const register = (event) => {
         event.preventDefault(); 
-        fetch("http://localhost:8000/authentication/register", {
+        fetch(url + "/authentication/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -348,7 +358,7 @@ However, this code won't work on its own. Right now, the frontend will try to re
 ```jsx
 // sends initial CSRF token request
 useEffect(() => {
-    fetch("http://localhost:8000/authentication/login", {
+    fetch(url + "/authentication/login", {
         method: "GET",
         credentials: "include",
     }).catch((error) => console.error("CSRF token retrieval error:", error));
@@ -363,6 +373,8 @@ import './AuthLayout.css';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function Login() {
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState(""); 
@@ -372,7 +384,7 @@ function Login() {
 
     // sends initial CSRF token request
     useEffect(() => {
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
             method: "GET",
             credentials: "include",
         }).catch((error) => console.error("CSRF token retrieval error:", error));
@@ -380,7 +392,7 @@ function Login() {
 
     const login = (event) => {
         event.preventDefault(); 
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -430,6 +442,8 @@ import './AuthLayout.css';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function Register() {
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState(""); 
@@ -440,7 +454,7 @@ function Register() {
 
     // sends initial CSRF token request
     useEffect(() => {
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
             method: "GET",
             credentials: "include",
         }).catch((error) => console.error("CSRF token retrieval error:", error));
@@ -448,7 +462,7 @@ function Register() {
 
     const register = (event) => {
         event.preventDefault(); 
-        fetch("http://localhost:8000/authentication/register", {
+        fetch(url + "/authentication/register", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -20,4 +20,4 @@ You can create the `.env` file with the `nano` command. First, `cd` into your re
 nano .env
 ```
 
-Check your `.env` from your local repository and paste that information. Here's a quick guide on how to use [nano](https://www.youtube.com/watch?v=g2PU--TctAM)! 
+Check your `.env` from your local repository and paste that information. Make sure you have secure passwords and secret keys and that `DEBUG` is set to false. Set the `VITE_FETCH_URL` to `http://` + your EC2 instance's IP address + `:8000`. Then save the file. Here's a quick guide on how to use [nano](https://www.youtube.com/watch?v=g2PU--TctAM)! 

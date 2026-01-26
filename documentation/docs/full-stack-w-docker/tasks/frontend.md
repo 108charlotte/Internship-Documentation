@@ -1,5 +1,5 @@
 # Frontend
-Go into the `frontend` folder, then into `src` and find `App.jsx`. It will have some placeholder content, including a vite logo and React logo. Delete this content and replace it with the below code, which creates a base to work from, including the imports we will be using:  
+Go into the `frontend` folder, then into `src` and find `App.jsx`. It will have some placeholder content, including a vite logo and React logo. Delete this content and replace it with the below code, which creates a base to work from, including the imports we will be using and the custom URL (see [authentication frontend](../authentication/frontend.md) and [database setup](../authentication/database.md) if confused): 
 
 ```jsx
 import { useState, useEffect } from 'react'; 
@@ -7,6 +7,8 @@ import './App.css';
 import { useLocation } from 'react-router-dom'; // this is the only difference from the authentication pages; it will be used to get the current user's username, which is passed from login and registration
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
+
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000";
 
 function App() {
 
@@ -45,6 +47,7 @@ const [sendDeleteRequest, setSendDeleteRequest] = useState(false); // no task ha
 const [errorForUser, setErrorForUser] = useState(""); // no error initially
 
 const navigate = useNavigate(); 
+
 ```
 
 To review, the `App.jsx` file should look like this now: 
@@ -54,6 +57,8 @@ import './App.css';
 import { useLocation } from 'react-router-dom';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
+
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
 
 function App() {
     const location = useLocation();
@@ -104,6 +109,8 @@ import './App.css';
 import { useLocation } from 'react-router-dom';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
+
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
 
 function App() {
     const location = useLocation();
@@ -166,7 +173,7 @@ const searchUsername = (event) => {
 The reason why this function is calling another function rather than retrieving the tasks from the backend itself is because when a task is added or deleted we will also need to retrieve a user's tasks, so the separate function helps reduce duplication. Now, let's look at the `getTasksForUsername` function. 
 ```jsx
 function getTasksForUsername() {
-    fetch("http://localhost:8000/tasks", {
+    fetch(url + "tasks", {
         method: "POST",
         headers: {
         "Content-Type": "application/json", 
@@ -195,13 +202,13 @@ function getTasksForUsername() {
 };
 ```
 
-The function starts with a fetch request to the backend, similar to those in user authentication, but with a different URL target: `http://localhost:8000/tasks` rather than `/authentication/login` or `/authentication/register`. It sends a post request with the same methodology as found in authentication (if you want to review the CSRF token or any other part of the POST request, check out the page on the [authentication frontend](../authentication/frontend.md)). Then, it converts the response to JSON format (to ensure all data is standardized) and checks for errors. The tasks endpoint for retrieving tasks will either return the JSON of the user's (determined by username) tasks or an error. If there's an error which the backend didn't anticipate and return a custom error message for, there's also a `.catch((error) => {...})` which defines the application's response in case of an unexpected error, along with entering it into the developer console so that you can debug. 
+The function starts with a fetch request to the backend, similar to those in user authentication, but with a different URL target: `/tasks` rather than `/authentication/login` or `/authentication/register`. It sends a post request with the same methodology as found in authentication (if you want to review the CSRF token or any other part of the POST request, check out the page on the [authentication frontend](../authentication/frontend.md)). Then, it converts the response to JSON format (to ensure all data is standardized) and checks for errors. The tasks endpoint for retrieving tasks will either return the JSON of the user's (determined by username) tasks or an error. If there's an error which the backend didn't anticipate and return a custom error message for, there's also a `.catch((error) => {...})` which defines the application's response in case of an unexpected error, along with entering it into the developer console so that you can debug. 
 
 But in order to get this CSRF token, we should generate one like we did for the [Login and Register pages](../authentication/frontend.md) by sending a fetch request to a CSRF enforced backend endpoint: 
 
 ```jsx
 useEffect(() => {
-    fetch("http://localhost:8000/authentication/login", {
+    fetch(url + "/authentication/login", {
         method: "GET",
         credentials: "include",
     }).catch((error) => console.error("CSRF token retrieval error:", error));
@@ -313,6 +320,8 @@ import { useLocation } from 'react-router-dom';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function App() {
     const location = useLocation();
 
@@ -328,14 +337,14 @@ function App() {
     const navigate = useNavigate(); 
 
     useEffect(() => {
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
             method: "GET",
             credentials: "include",
         }).catch((error) => console.error("CSRF token retrieval error:", error));
     }, []);
 
     function getTasksForUsername() {
-        fetch("http://localhost:8000/tasks", {
+        fetch(url + "/tasks", {
             method: "POST",
             headers: {
             "Content-Type": "application/json", 
@@ -438,7 +447,7 @@ Now, let's look at the `addTask` arrow function:
 const addTask = (event) => {
     event.preventDefault(); 
     setErrorForUser("");
-    fetch("http://localhost:8000/addtask", {
+    fetch(url + "/addtask", {
         method: "POST", 
         headers: {
         "Content-Type": "application/json", 
@@ -472,6 +481,8 @@ import { useLocation } from 'react-router-dom';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function App() {
     const location = useLocation();
 
@@ -487,14 +498,14 @@ function App() {
     const navigate = useNavigate(); 
 
     useEffect(() => {
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
             method: "GET",
             credentials: "include",
         }).catch((error) => console.error("CSRF token retrieval error:", error));
     }, []);
 
     function getTasksForUsername() {
-        fetch("http://localhost:8000/tasks", {
+        fetch(url + "/tasks", {
             method: "POST",
             headers: {
             "Content-Type": "application/json", 
@@ -530,7 +541,7 @@ function App() {
     const addTask = (event) => {
         event.preventDefault(); 
         setErrorForUser("");
-        fetch("http://localhost:8000/addtask", {
+        fetch(url + "/addtask", {
             method: "POST", 
             headers: {
             "Content-Type": "application/json", 
@@ -634,7 +645,7 @@ Now, let's define a `useEffect` block which checks if `sendDeleteRequest` is tru
 ```jsx
 useEffect(() => {
     if (sendDeleteRequest) {
-        fetch("http://localhost:8000/deletetask", {
+        fetch(url + "/deletetask", {
             method: "POST", 
             headers: {
                 "Content-Type": "application/json", 
@@ -674,7 +685,7 @@ This creates a button for the user to log out which calls the `logout` arrow fun
 const logout = (event) => {
     event.preventDefault(); 
     setErrorForUser("");
-    fetch("http://localhost:8000/authentication/logout", {
+    fetch(url + "/authentication/logout", {
         method: "POST", 
         headers: {
         "Content-Type": "application/json", 
@@ -707,6 +718,8 @@ import { useLocation } from 'react-router-dom';
 import { getCookie } from './csrftoken.jsx'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const url = import.meta.env.VITE_FETCH_URL ? import.meta.env.VITE_FETCH_URL : "http://localhost:8000"; 
+
 function App() {
     const location = useLocation();
 
@@ -722,7 +735,7 @@ function App() {
     const navigate = useNavigate(); 
 
     useEffect(() => {
-        fetch("http://localhost:8000/authentication/login", {
+        fetch(url + "/authentication/login", {
             method: "GET",
             credentials: "include",
         }).catch((error) => console.error("CSRF token retrieval error:", error));
@@ -730,7 +743,7 @@ function App() {
 
     useEffect(() => {
       if (sendDeleteRequest) {
-          fetch("http://localhost:8000/deletetask", {
+          fetch(url + "/deletetask", {
               method: "POST", 
               headers: {
                   "Content-Type": "application/json", 
@@ -765,7 +778,7 @@ function App() {
     const logout = (event) => {
         event.preventDefault(); 
         setErrorForUser("");
-        fetch("http://localhost:8000/authentication/logout", {
+        fetch(url + "/authentication/logout", {
             method: "POST", 
             headers: {
             "Content-Type": "application/json", 
@@ -785,7 +798,7 @@ function App() {
     }
 
     function getTasksForUsername() {
-        fetch("http://localhost:8000/tasks", {
+        fetch(url + "/tasks", {
             method: "POST",
             headers: {
             "Content-Type": "application/json", 
@@ -821,7 +834,7 @@ function App() {
     const addTask = (event) => {
         event.preventDefault(); 
         setErrorForUser("");
-        fetch("http://localhost:8000/addtask", {
+        fetch(url + "/addtask", {
             method: "POST", 
             headers: {
             "Content-Type": "application/json", 

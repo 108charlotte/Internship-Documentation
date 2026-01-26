@@ -38,6 +38,9 @@ DATABASES = {
 
 Now, rather than using the default SQLite database (`'django.db.backends.sqlite3'`), Django will use a PostgreSQL database which we will initialize with the Docker Compose file. 
 
+## Secret Key and Debug
+Since we're setting up environmental variables, let's also update Django's `SECRET_KEY`. Set `SECRET_KEY` to `os.environ.get('SECRET_KEY', 'error-setting-secret-key')`. This will help keep your project secure! 
+Additionally, set `DEBUG` to `DEBUG = os.environ.get('DEBUG', 'False') == 'True'`. 
 
 ## Docker Compose
 The Docker compose file can be used to create this new database, set up periodic data migrations, and check for database health. First, add another service titled `db` to your `docker-compose.yaml` file. Set its image to `postgres:17.1`. Now, we need to add a volume for persistent data storage when the container restarts. On the same level as "services", add a section titled "volumes", and include "db-data:" inside of it. This will define a named volume which we will link the database to. 
@@ -94,14 +97,19 @@ DB_HOST=db
 DB_NAME=db
 DB_USER=user
 DB_PASS=tutorial_password
+
 POSTGRES_DB=db
 POSTGRES_USER=user
 POSTGRES_PASSWORD=tutorial_password
+
+SECRET_KEY=INSERT_YOUR_SECRET_KEY_HERE
+DEBUG=False
+VITE_FETCH_URL=http://localhost:8000
 ```
 
-You should set your database password and Postgres password to a randomly generated string of characters rather than something easily guessable like "tutorial_password", "development_password", "temp", etc. Now, set the Docker Compose to use these variables: 
+You should set your database password, Postgres password, and secret key to randomly generated strings of characters rather than something easily guessable like "tutorial_password", "development_password", "temp", etc. Now, set the Docker Compose to use these variables: 
 
-The backend should load the .env so that Django has the database credentials, so add the following in the "backend" service: 
+The backend should load the .env so that Django has the database credentials. The frontend needs to load the .env so it can see the URL to send requests to. So add the following in both the "backend" and "frontend" services: 
 ```dockerfile
 env_file:
     - .env
@@ -160,6 +168,8 @@ services:
     build: ./frontend
     ports: 
       - "5173:5173"
+    env_file: 
+      - .env
 
   db: 
     image: postgres:17.1
